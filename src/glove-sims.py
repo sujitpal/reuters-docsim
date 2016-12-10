@@ -10,12 +10,12 @@ import time
 import dsutils
 
 DATA_DIR = "../data"
-MAX_FEATURES = 50
-VOCAB_SIZE = 50
+EMBEDDING_SIZE = 200
+VOCAB_SIZE = 5000
 GLOVE_VECS = os.path.join(DATA_DIR, 
-    "glove.6B.{:d}d.txt".format(MAX_FEATURES))
+    "glove.6B.{:d}d.txt".format(EMBEDDING_SIZE))
 VECTORS_FILE = os.path.join(DATA_DIR, 
-    "glove-{:d}-vecs.csv".format(MAX_FEATURES))
+    "glove-{:d}-vecs.csv".format(EMBEDDING_SIZE))
 
 start = time.time()
 texts = []
@@ -36,7 +36,7 @@ print("{:d} lines of text read, COMPLETED in {:.3f}s"
 # read glove vectors
 print("Reading GloVe vectors...", end="")
 start = time.time()
-glove = collections.defaultdict(lambda: np.zeros((MAX_FEATURES,)))
+glove = collections.defaultdict(lambda: np.zeros((EMBEDDING_SIZE,)))
 fglove = open(GLOVE_VECS, "rb")
 for line in fglove:
     cols = line.strip().split()
@@ -52,7 +52,7 @@ print("Extracting vocabulary...", end="")
 start = time.time()
 cvec = CountVectorizer(max_features=VOCAB_SIZE,
                        stop_words="english",
-                       binary=False)
+                       binary=True)
 C = cvec.fit_transform(texts)
 elapsed = time.time() - start
 print("COMPLETED IN {:.3f}s".format(elapsed))
@@ -64,16 +64,19 @@ idx2word = {v:k for k, v in word2idx.items()}
 # individual words. Thus if a document contains the words "u u v"
 # then the document vector is 2*embedding(u) + embedding(v).
 print("Vectorizing...", end="")
-X = np.zeros((C.shape[0], MAX_FEATURES))
+X = np.zeros((C.shape[0], EMBEDDING_SIZE))
 for i in range(C.shape[0]):
     row = C[i, :].toarray()
     wids = np.where(row > 0)[1]
     counts = row[:, wids][0]
-    embeddings = np.zeros((wids.shape[0], MAX_FEATURES))
+    num_words = np.sum(counts)
+    if num_words == 0:
+        continue
+    embeddings = np.zeros((wids.shape[0], EMBEDDING_SIZE))
     for j in range(wids.shape[0]):
         wid = wids[j]
         embeddings[j, :] = counts[j] * glove[idx2word[wid]]
-    X[i, :] = np.sum(embeddings, axis=0)
+    X[i, :] = np.sum(embeddings, axis=0) / num_words
 elapsed = time.time() - start
 print("COMPLETED in {:.3f}s".format(elapsed))
 
