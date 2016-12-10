@@ -7,7 +7,7 @@ import time
 import dsutils
 
 DATA_DIR = "../data"
-MAX_FEATURES = 50
+MAX_FEATURES = 5000
 VECTORS_FILE = os.path.join(DATA_DIR, 
     "wordcount-{:d}-vecs.mtx".format(MAX_FEATURES))
 
@@ -30,7 +30,8 @@ print("{:d} lines of text read, COMPLETED in {:.3f}s"
 print("vectorizing...", end="")
 start = time.time()
 cvec = CountVectorizer(max_features=MAX_FEATURES,
-                       stop_words="english")
+                       stop_words="english",
+                       binary=False)
 X = cvec.fit_transform(texts)
 elapsed = time.time() - start
 print("COMPLETED in {:.3f}s".format(elapsed))

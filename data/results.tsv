@@ -1,0 +1,6 @@
+# vectorizer	pearson_min	pearson_max
+count	0.133	0.414
+tfidf	0.453	0.466
+lsa	0.424	0.457
+glove	0.421	0.458
+w2v	0.429	0.534

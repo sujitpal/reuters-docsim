@@ -8,17 +8,17 @@ import dsutils
 
 DATA_DIR = "../data"
 
-#VECTORIZER = "wordcount"
+VECTORIZER = "wordcount"
 #VECTORIZER = "tfidf"
 #VECTORIZER = "lsa"
 #VECTORIZER = "glove"
-VECTORIZER = "w2v"
+#VECTORIZER = "w2v"
 
 X_IS_SPARSE = True
-#Y_IS_SPARSE = True
-Y_IS_SPARSE = False
+Y_IS_SPARSE = True
+#Y_IS_SPARSE = False
 
-NUM_FEATURES = 300
+NUM_FEATURES = 5000
 
 XFILE = os.path.join(DATA_DIR, "tag-vecs.mtx")
 YFILE = os.path.join(DATA_DIR, "{:s}-{:d}-vecs.{:s}"
