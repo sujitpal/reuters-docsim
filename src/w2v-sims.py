@@ -32,12 +32,12 @@ elapsed = time.time() - start
 print("{:d} lines of text read, COMPLETED in {:.3f}s"
     .format(num_read, elapsed))
 
-## read word2vec vectors
-#print("Reading Word2Vec vectors...", end="")
-#start = time.time()
-#word2vec = Word2Vec.load_word2vec_format(WORD2VEC_MODEL, binary=True)
-#elapsed = time.time() - start
-#print("COMPLETED in {:.3f}s".format(elapsed))
+# read word2vec vectors
+print("Reading Word2Vec vectors...", end="")
+start = time.time()
+word2vec = Word2Vec.load_word2vec_format(WORD2VEC_MODEL, binary=True)
+elapsed = time.time() - start
+print("COMPLETED in {:.3f}s".format(elapsed))
 
 # use CountVectorizer to compute vocabulary
 print("Extracting vocabulary...", end="")
